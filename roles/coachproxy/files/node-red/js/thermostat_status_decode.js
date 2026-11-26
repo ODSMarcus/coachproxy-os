@@ -52,8 +52,8 @@ if (fanmode == 'on') {
 }
 
 // Add a symbol to the air conditioner/heat pump label when it's running
-var ac_label = ac_on ? '❄︎ A/C' : 'A/C';
-var hp_label = hp_on ? '☀︎︎ H.PUMP' : 'H.PUMP';
+var ac_label = ac_on ? '&#10052;︎ A/C' : 'A/C';
+var hp_label = hp_on ? '︎&#9728; H.PUMP' : 'H.PUMP';
 
 // Colors for on/off status of buttons
 var on  = { foreground: 'white', background: '#3D89BE' };
@@ -80,4 +80,5 @@ return [
   Object.assign({ payload: lowstatus.foreground }, lowstatus),
   Object.assign({ payload: autostatus.foreground }, autostatus)
 ]
+
 

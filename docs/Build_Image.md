@@ -41,8 +41,17 @@ to install the key:
 ssh-copy-id -i ~/.ssh/id_rsa pi@<ip address>
 ```
 
-Next, update the `inventory/hosts.yml` file in this repository with the
-RPi IP address so Ansible can connect and continue the configuration.
+Next, create your inventory from the provided example and set the RPi IP
+address so Ansible can connect and continue the configuration:
+
+```
+cp inventory/hosts.yml.example inventory/hosts.yml
+```
+
+`inventory/hosts.yml` is intentionally gitignored so that host addresses
+and credentials are never committed. Prefer SSH keys over passwords; if
+you need a `become` password, pass it at run time with `--ask-become-pass`
+rather than storing it in the file.
 
 Lastly, update the `roles/base_os/files/public_keys/root-coachproxy` file
 with your public SSH key. This key will be installed into the root

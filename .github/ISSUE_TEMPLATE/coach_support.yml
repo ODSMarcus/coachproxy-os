@@ -1,0 +1,45 @@
+---
+name: Coach model support
+description: Request or contribute support for a year/model/floorplan
+labels: [coach-support]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Support for a coach lives in
+        `roles/coachproxy/files/configurator/features.json`.
+        Accurate node IDs are the hard part — they must come from a real
+        coach, not from a similar model.
+
+  - type: input
+    id: coach
+    attributes:
+      label: Year / Make / Model / Floorplan
+      placeholder: "2020 VanLeigh Vilano 385RD"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: verified
+    attributes:
+      label: How were the node IDs obtained?
+      options:
+        - Captured from my coach with candump
+        - Copied from a similar model (unverified)
+        - I don't have IDs yet — requesting support
+    validations:
+      required: true
+
+  - type: textarea
+    id: capture
+    attributes:
+      label: CAN capture
+      description: >
+        Output of `candump can0` while toggling known devices, if you have it.
+        Note which physical switch you operated for each burst.
+      render: shell
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else

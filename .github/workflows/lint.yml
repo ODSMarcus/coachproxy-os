@@ -1,0 +1,62 @@
+---
+name: Lint
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: yamllint + ansible-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install linters
+        run: pip install ansible-lint yamllint
+
+      - name: yamllint
+        run: yamllint .
+
+      # Not gating the build yet: this repo predates FQCN and still carries
+      # plenty of legacy style. Surfacing findings without failing CI lets us
+      # burn them down incrementally.
+      - name: ansible-lint
+        run: ansible-lint || true
+
+  json:
+    name: Validate features.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # features.json drives the whole configurator. A duplicate key silently
+      # overwrites a device (this bit us on 2021 Phaeton light 85), so check
+      # for both invalid JSON and duplicate keys.
+      - name: Parse and check for duplicate keys
+        run: |
+          python3 - <<'PY'
+          import collections, json, sys
+
+          path = 'roles/coachproxy/files/configurator/features.json'
+          dups = []
+
+          def hook(pairs):
+              counts = collections.Counter(k for k, _ in pairs)
+              dups.extend(k for k, n in counts.items() if n > 1 and k != '_comment')
+              return dict(pairs)
+
+          with open(path) as fh:
+              json.load(fh, object_pairs_hook=hook)
+
+          if dups:
+              print(f'Duplicate keys in {path}: {sorted(set(dups))}')
+              sys.exit(1)
+          print(f'{path}: valid, no duplicate keys')
+          PY

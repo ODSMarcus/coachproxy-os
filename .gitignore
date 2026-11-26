@@ -1,0 +1,27 @@
+# Ansible
+*.retry
+.vault_pass
+vault_pass.txt
+*.vault
+inventory/hosts.yml
+
+# Device state — contains user credentials (SMTP, ngrok, remote access).
+# Only the blank template (coachproxy.sqlite-base) belongs in git.
+coachproxy.sqlite
+*.sqlite-journal
+
+# Python / tooling
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Editors & OS
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Agent tooling
+.claude/settings.local.json

@@ -1,0 +1,16 @@
+---
+# Copy to hosts.yml and edit for your build device.
+# hosts.yml is gitignored so credentials never reach the repo.
+#
+# Prefer SSH keys over passwords (see docs/Build_Image.md):
+#   ssh-copy-id -i ~/.ssh/id_rsa pi@<ip address>
+#
+# If you must use a become password, supply it at run time instead of
+# storing it here:
+#   ansible-playbook coachproxyos.yml --ask-become-pass
+
+all:
+  hosts:
+    cp-build:
+      ansible_host: 192.168.1.10
+      ansible_user: pi

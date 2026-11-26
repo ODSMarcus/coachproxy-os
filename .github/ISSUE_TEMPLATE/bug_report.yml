@@ -1,0 +1,44 @@
+---
+name: Bug report
+description: Something isn't working
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+
+  - type: input
+    id: coach
+    attributes:
+      label: Year / Make / Model / Floorplan
+      placeholder: "2020 VanLeigh Vilano 385RD"
+
+  - type: input
+    id: os
+    attributes:
+      label: Raspberry Pi OS version
+      placeholder: "Raspbian 10 (buster)"
+
+  - type: input
+    id: version
+    attributes:
+      label: CoachProxyOS version
+      description: "Output of /coachproxy/bin/version.sh"
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: >
+        From /coachproxy/log or `journalctl -u nodered`.
+        Scrub SMTP passwords, ngrok tokens, and remote-access credentials
+        before pasting.
+      render: shell
