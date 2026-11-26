@@ -38,6 +38,7 @@
           "28": { "name": "Ceiling", "location": "C", "order": 30 },
           "75": { "name": "Door", "location": "E", "order": 5 },
           "85": { "name": "Undercoach", "location": "E", "order": 35 },
+          "85": { "name": "Windshield", "location": "E", "order": 36 },
           "87": { "name": "Map", "location": "PS", "order": 45 },
           "91": { "name": "Road", "location": "E", "order": 20 },
           "92": { "name": "Porch", "location": "E", "order": 10 }
