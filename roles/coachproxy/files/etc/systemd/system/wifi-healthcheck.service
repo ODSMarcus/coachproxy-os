@@ -1,0 +1,5 @@
+[Unit]
+Description=Check wlan0 reachability and recover if dead
+[Service]
+Type=oneshot
+ExecStart=/coachproxy/bin/wifi_healthcheck.sh

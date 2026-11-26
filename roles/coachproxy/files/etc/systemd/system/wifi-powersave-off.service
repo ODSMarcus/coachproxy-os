@@ -1,0 +1,14 @@
+[Unit]
+Description=Disable wlan0 WiFi power save (brcmfmac stability)
+After=network.target dhcpcd.service
+Wants=network.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# brcmfmac re-enables power save on every boot.
+ExecStartPre=/bin/sleep 20
+ExecStart=/sbin/iw dev wlan0 set power_save off
+
+[Install]
+WantedBy=multi-user.target

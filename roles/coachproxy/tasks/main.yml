@@ -140,6 +140,31 @@
     - hass-discovery
   become: true
 
+# WiFi stability. The Pi's brcmfmac WiFi can wedge (associated but
+# passing no traffic) with nothing logged, so power save is disabled and
+# a healthcheck recovers wlan0 when the gateway stops answering.
+
+- name: Install WiFi systemd files
+  copy:
+    src: "/coachproxy/etc/systemd/system/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    remote_src: true
+  loop:
+    - wifi-powersave-off.service
+    - wifi-healthcheck.service
+    - wifi-healthcheck.timer
+  become: true
+
+- name: Enable WiFi power save fix and healthcheck
+  systemd:
+    name: "{{ item }}"
+    enabled: true
+    daemon_reload: true
+  loop:
+    - wifi-powersave-off.service
+    - wifi-healthcheck.timer
+  become: true
+
 # nginx
 
 - name: Disable default nginx config
