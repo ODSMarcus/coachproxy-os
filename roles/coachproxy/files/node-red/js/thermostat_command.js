@@ -49,19 +49,6 @@ if (isNaN(msg.payload)) {
     if (msg.payload == current_mode) {
       // Turn off current mode, e.g. "cool" pressed while already cooling.
       command = 'off';
-    } else if (command == 'cool' || command == 'heat') {
-      // If heat or cool is being turned on, ensure opposing mode is off for
-      // all thermostats. Spyder takes care of this automatically for 2018+
-      // models, but in the 2017 VanLeigh Vilano, it's possible to end up with
-      // both the air conditioner and furnace on at the same time without this
-      // check.
-      const disable_mode = (command == 'cool' ? 'heat' : 'cool');
-      for (let i = firstzone; i < firstzone + 5; i++) {
-        let zonestatus = global.get('status').tstat[i];
-        if (zonestatus && zonestatus.mode && zonestatus.mode == disable_mode) {
-          msgs.push( { payload: i + ' off' } );
-        }
-      }
     }
   }
   msgs.push( { payload: [instance, command, current_mode].join(' ') } );
@@ -79,4 +66,5 @@ else {
 }
 
 return [msgs];
+
 
