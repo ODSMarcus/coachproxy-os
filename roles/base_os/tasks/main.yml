@@ -19,6 +19,22 @@
     - apt-daily-upgrade.timer
     - apt-daily-upgrade.service
 
+# Buster was removed from raspbian.raspberrypi.org (404). The legacy
+# archive still serves it, frozen, so its Release file is past its
+# Valid-Until date and apt refuses it unless that check is disabled.
+- name: Point apt at the legacy Raspbian archive
+  replace:
+    path: /etc/apt/sources.list
+    regexp: 'raspbian\.raspberrypi\.org'
+    replace: 'legacy.raspbian.org'
+  become: true
+
+- name: Allow the frozen legacy Raspbian Release file
+  copy:
+    content: 'Acquire::Check-Valid-Until "false";'
+    dest: /etc/apt/apt.conf.d/99legacy-raspbian
+  become: true
+
 - name: Ensure existing packages are up to date
   apt:
     upgrade: dist
