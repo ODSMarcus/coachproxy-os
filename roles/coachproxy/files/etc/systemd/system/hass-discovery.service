@@ -1,0 +1,17 @@
+[Unit]
+Description=Publish Home Assistant MQTT discovery configs for the coach
+After=network-online.target mosquitto.service hass-command.service
+Wants=network-online.target
+Requires=mosquitto.service
+
+[Service]
+Type=oneshot
+User=pi
+RemainAfterExit=yes
+# mosquitto runs with persistence disabled, so retained discovery configs are
+# lost on every broker restart. Republish them once the broker is back up.
+ExecStartPre=/bin/sleep 15
+ExecStart=/usr/bin/perl -w /coachproxy/bin/hass_discovery.pl
+
+[Install]
+WantedBy=multi-user.target

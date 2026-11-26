@@ -1,0 +1,41 @@
+# /etc/mosquitto/conf.d/hass-bridge.conf
+#
+# Outbound bridge from the coach's mosquitto to the Home Assistant broker.
+# The Pi dials out, so this needs no port forward on the MoFi and adds no
+# inbound exposure. It reconnects on its own whenever the camper is back on
+# the home network.
+
+connection hass
+address 192.168.3.10:1883
+remote_username __MQTT_USER__
+remote_password __MQTT_PASS__
+remote_clientid coachproxy-bridge
+
+bridge_protocol_version mqttv311
+try_private true
+cleansession false
+start_type automatic
+restart_timeout 15
+keepalive_interval 30
+
+# Publishes "1" on connect and "0" via last-will on drop. Every entity uses
+# this as its availability topic, so HA greys the coach out when it is away
+# instead of showing stale values as current.
+notifications true
+notification_topic RVC/bridge/state
+
+# --- coach state out to Home Assistant ---------------------------------
+# Deliberately narrow. The RV-C bus also carries UNKNOWN-* frames and a swarm
+# of undefined DC_SOURCE instances that are pure noise; none of that is worth
+# shipping across.
+topic RVC/DC_DIMMER_STATUS_3/# out 0
+topic RVC/TANK_STATUS/# out 0
+topic RVC/THERMOSTAT_AMBIENT_STATUS/# out 0
+topic RVC/THERMOSTAT_STATUS_1/# out 0
+topic RVC/DC_SOURCE_STATUS_1/1 out 0
+
+# --- discovery configs out (retained) ----------------------------------
+topic homeassistant/# out 0
+
+# --- commands in from Home Assistant -----------------------------------
+topic RVC/command/# in 0

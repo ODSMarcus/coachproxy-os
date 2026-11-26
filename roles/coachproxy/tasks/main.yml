@@ -116,6 +116,30 @@
     enabled: true
   become: true
 
+# Home Assistant MQTT bridge. The bridge itself needs HA's MQTT
+# credentials, so run /coachproxy/bin/setup_hass_bridge.sh once after
+# the build to write /etc/mosquitto/conf.d/hass-bridge.conf.
+
+- name: Install Home Assistant bridge systemd files
+  copy:
+    src: "/coachproxy/etc/systemd/system/{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    remote_src: true
+  loop:
+    - hass-command.service
+    - hass-discovery.service
+  become: true
+
+- name: Enable Home Assistant bridge services
+  systemd:
+    name: "{{ item }}"
+    enabled: true
+    daemon_reload: true
+  loop:
+    - hass-command
+    - hass-discovery
+  become: true
+
 # nginx
 
 - name: Disable default nginx config
