@@ -1,23 +1,17 @@
+version: "2"
 authtoken: AUTHTOKEN
 region: us
 console_ui: false
-update: false
+update_check: false
 tunnels:
+  # With a custom subdomain the tunnel is bound to https only, so
+  # basic-auth usernames/passwords are never sent over non-SSL. (The
+  # ngrok v2 agent needed a second tunnel to port 8443 for this.)
   coachproxy:
+    proto: http
     addr: 80
-    proto: http
-    auth: USERNAME:PASSWORD
+    basic_auth:
+      - "USERNAME:PASSWORD"
     subdomain: SUBDOMAIN
-    bind_tls: BIND_TLS
-    inspect: false
-
-  # Allow unauthenticated http requests through the tunnel, but
-  # forward them to port 8443 which will redirect them to https.
-  # This ensures that no basic-auth usernames/passwords will be
-  # sent over non-SSL.
-  ssl_redirect:
-    addr: 8443
-    proto: http
-    subdomain: SUBDOMAIN
-    bind_tls: false
+    schemes: [SCHEMES]
     inspect: false

@@ -246,16 +246,18 @@
 
 # install ngrok for remote access
 
-- name: Check if ngrok has already been installed
-  stat:
-    path: /usr/local/bin/ngrok
+- name: Check installed ngrok version
+  command: /usr/local/bin/ngrok version
   register: ngrok
+  changed_when: false
+  failed_when: false
 
-- name: Download ngrok binary
+# Also replaces an old v2 agent, whose config format v3 does not accept.
+- name: Download ngrok v3 binary
   unarchive:
-    src: https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-arm.zip
+    src: https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-arm.tgz
     dest: /usr/local/bin
     mode: 0755
     remote_src: yes
-  when: ngrok.stat.exists == false
+  when: ngrok.rc != 0 or 'version 3.' not in ngrok.stdout
   become: true

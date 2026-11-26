@@ -80,23 +80,26 @@ if [[ ${#pass} -lt 1 ]]; then
   abort "ERROR: Password is missing."
 fi
 
-# If a custom subdomain is used, bind the main tunnel to https only.
-# The secondary tunnel will then be bound to http using the same
-# domain name. If a custom subdomain is not used, bind the main tunnel
-# to both http and https, since the secondary tunnel will have a
-# completely different URL which won't be usable by the user.
-bind_tls=true
+# ngrok v3 rejects basic-auth passwords shorter than 8 characters and
+# refuses to start the tunnel at all.
+if [[ ${#pass} -lt 8 ]]; then
+  abort "ERROR: Password must be at least 8 characters."
+fi
+
+# If a custom subdomain is used, bind the tunnel to https only. If a
+# custom subdomain is not used, bind it to both http and https.
+schemes=https
 if [[ ${#domain} -lt 1 ]]; then
-  bind_tls=both
+  schemes="http, https"
 fi
 
 # Rebuild config file
 log "$script update ngrok.conf with latest user settings"
-sed "${conf}-TEMPLATE" -e "s/AUTHTOKEN/$auth/" -e "s/USERNAME/$user/" -e "s/PASSWORD/$pass/" -e "s/BIND_TLS/$bind_tls/" -e "s/SUBDOMAIN/$domain/" > $conf
+sed "${conf}-TEMPLATE" -e "s/AUTHTOKEN/$auth/" -e "s/USERNAME/$user/" -e "s/PASSWORD/$pass/" -e "s/SCHEMES/$schemes/" -e "s/SUBDOMAIN/$domain/" > $conf
 
 # Restart tunnel
 log "$script restarting ngrok tunnel."
 send_message "Restarting remote access system. See above for URL."
 sudo killall ngrok
 sleep 2
-/usr/local/bin/ngrok start -config /coachproxy/etc/ngrok.conf --all &
+/usr/local/bin/ngrok start --config /coachproxy/etc/ngrok.conf --all &
