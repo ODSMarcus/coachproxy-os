@@ -498,6 +498,15 @@ print "Updating lights.\n" if ($debug);
 system("/coachproxy/configurator/node_changer.pl $tmpfile $tmpfile2 $year $model $floorplan");
 if (-z "$tmpfile") { abort(); }
 
+# Re-apply this coach's hand customizations so they survive a re-run.
+my $customizations = "/coachproxy/configurator/coach_customizations.jq";
+if (-e $customizations) {
+  print "Applying coach customizations.\n" if ($debug);
+  system("jq -f $customizations < $tmpfile > ${tmpfile}_edit");
+  system("mv ${tmpfile}_edit $tmpfile");
+  if (-z "$tmpfile") { abort(); }
+}
+
 # Create ha-bridge device.db with non-light devices
 open($fh, ">>", $tmpfile2) or die "Could not open file $tmpfile2 $!";
 print $fh ']';
