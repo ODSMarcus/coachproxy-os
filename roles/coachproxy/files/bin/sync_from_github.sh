@@ -97,8 +97,11 @@ if [[ -n $prev && $prev != "$sha" ]]; then
     python3 -c '
 import json, sys
 for f in json.load(sys.stdin).get("files", []):
-    if not f["filename"].startswith("roles/coachproxy/files/"):
-        print("  " + f["filename"])
+    name = f["filename"]
+    # Docs never apply to the Pi, so they are not worth a warning.
+    if name.startswith(("roles/coachproxy/files/", "docs/")) or name.endswith(".md"):
+        continue
+    print("  " + name)
 ')
   if [[ -n $outside ]]; then
     echo "Changed since ${prev:0:7} but NOT applied by this sync (Ansible-only):"
