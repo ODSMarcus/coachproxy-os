@@ -180,7 +180,9 @@ for f in $changed; do
     node-red/*) note_manual "sudo systemctl restart nodered" ;;
     ha-bridge/*) note_manual "sudo systemctl restart habridge" ;;
     bin/rvc2mqtt.pl|etc/rvc-spec.yml) note_manual "restart rvc2mqtt.pl (or reboot)" ;;
-    configurator/*) note_manual "re-run the CoachProxy configurator to regenerate the flows" ;;
+    # Deliberately not a prompt to re-run it: that regenerates the flows
+    # from the template, replacing this coach's live flow.
+    configurator/*) note_manual "configurator files changed; they only take effect if the configurator is re-run (not wanted on this coach)" ;;
     etc/ngrok.conf-TEMPLATE|bin/apply_remote_access_settings.sh)
       # Not automatic: it restarts the tunnel, which would cut off a sync
       # being run over remote access.
