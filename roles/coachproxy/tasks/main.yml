@@ -34,11 +34,14 @@
 
 # node-red configs
 
+# files/ carries this coach's own flows_coachproxy.json, so only fall
+# back to the generic base flow when there is none.
 - name: Copy initial node-red flows file to main flows file
   copy:
     src: /coachproxy/node-red/flows_coachproxy-base.json
     dest: /coachproxy/node-red/flows_coachproxy.json
     remote_src: true
+    force: false
 
 - name: Copy initial database file to main database file
   copy:

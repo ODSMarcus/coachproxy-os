@@ -15,7 +15,7 @@ at the branch named in `/coachproxy/etc/sync.conf`.
 * It downloads a tarball from GitHub, so git and SSH keys are not
   needed on the Pi.
 * It never deletes files, and never overwrites files the Pi rewrites at
-  runtime (`ha-bridge/device.db`).
+  runtime (`ha-bridge/device.db`, `node-red/flows_coachproxy.json`).
 * Every file it replaces is saved under `/coachproxy/backup-sync/<time>/`
   (the 10 most recent are kept).
 * It reloads nginx (after `nginx -t`; a failing config is rolled back),
@@ -44,6 +44,21 @@ Deploy a different branch or commit once, without changing `sync.conf`:
 
 To change which branch the coach follows, edit `REF` in
 `roles/coachproxy/files/etc/sync.conf`, commit, and sync.
+
+Node-RED flows go the other way
+-------------------------------
+
+`roles/coachproxy/files/node-red/flows_coachproxy.json` is this coach's
+live Node-RED flow. It is changed on the Pi (by the CoachProxy
+configurator or the Node-RED editor), so the sync never writes it.
+After changing flows on the Pi, copy it back and commit:
+
+    scp -O pi@coachproxyos:/coachproxy/node-red/flows_coachproxy.json \
+        roles/coachproxy/files/node-red/
+
+Settings such as remote access, notification keys and SMTP login live
+in `/coachproxy/node-red/coachproxy.sqlite`, not in the flow, and are
+never committed.
 
 Rolling back
 ------------

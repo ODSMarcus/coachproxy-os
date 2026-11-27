@@ -24,8 +24,11 @@ log=/coachproxy/bin/cplog.sh
 script=$(basename $0 .sh)
 
 # Repo files that the Pi rewrites at runtime. Never overwrite these.
+# The flows file is changed on the Pi (configurator / Node-RED editor) and
+# copied back into the repo, so it only ever goes Pi -> repo.
 PROTECTED=(
   ha-bridge/device.db
+  node-red/flows_coachproxy.json
 )
 
 apply=false
