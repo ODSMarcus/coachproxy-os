@@ -105,6 +105,16 @@
         "width": "6"
     },
     {
+        "id": "42dc3572.ee649e",
+        "type": "ui_group",
+        "z": "5a05b8f3.894b88",
+        "name": "Front Bath",
+        "tab": "ca7e3f9c.a33c",
+        "order": 10,
+        "disp": true,
+        "width": "6"
+    },
+    {
         "id": "4da57d95.96a5cc",
         "type": "ui_tab",
         "z": "2fdd8124.05e35e",
@@ -165,7 +175,7 @@
         "z": "5a05b8f3.894b88",
         "name": "Rear Bath",
         "tab": "ca7e3f9c.a33c",
-        "order": 10,
+        "order": 11,
         "disp": true,
         "width": "6"
     },
@@ -256,7 +266,7 @@
         "z": "",
         "name": "General",
         "tab": "ca7e3f9c.a33c",
-        "order": 12,
+        "order": 13,
         "disp": true,
         "width": "6",
         "collapse": false
@@ -405,7 +415,7 @@
         "z": "",
         "name": "Closet",
         "tab": "ca7e3f9c.a33c",
-        "order": 11,
+        "order": 12,
         "disp": true,
         "width": "6",
         "collapse": false
